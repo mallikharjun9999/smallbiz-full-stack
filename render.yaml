@@ -1,0 +1,22 @@
+# Render blueprint: backend API service.
+# Database: use MongoDB Atlas (Render has no managed MongoDB) and paste its URI as MONGO_URI.
+# Frontend: deploy `frontend/` separately on Vercel/Netlify with VITE_API_URL=https://<this-api>/api
+services:
+  - type: web
+    name: smallbiz-api
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false # paste Atlas connection string in dashboard
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: FRONTEND_URL
+        sync: false # e.g. https://smallbiz-web.vercel.app (comma-separated if more than one)
